@@ -1,11 +1,28 @@
-<div id="homepage-wrapper">
+<div id="homepage-wrapper full-page">
   <h1>Team</h1>
-  <section id="review-section-wrapper">
+  <section id="review-section">
+    <div id="gameweek-label">Gameweek 2</div>
     <div id="points-tally">
-      <h2>Points this week: {{ currentPointsTotal }}</h2>
+      <ng-container *ngIf="tempViewMode === viewMode.CURRENT"
+        ><h2>Points this week: {{ currentPointsTotal }}</h2></ng-container
+      >
+      <ng-container *ngIf="tempViewMode === viewMode.EDIT"
+        ><h2>Team Value: {{ currentTeamValue }}m</h2></ng-container
+      >
     </div>
-    <div id="current-team-wrapper">
-      <app-current-team></app-current-team>
+    <div id="current-team">
+      <button (click)="tempViewMode = viewMode.EDIT">EDIT</button>
+      <button (click)="tempViewMode = viewMode.CURRENT">CURRENT</button>
+      <button (click)="tempViewMode = viewMode.TENTATIVE">TENTATIVE</button>
+      <app-team-template
+        [team]="currentTeam"
+        [viewMode]="tempViewMode"
+      ></app-team-template>
     </div>
   </section>
+  <section id="mini-league-preview"></section>
+  <section id="latest-scores-preview">
+    <div></div>
+  </section>
+  <section id="ranks-and-avg-scores-preview"></section>
 </div>

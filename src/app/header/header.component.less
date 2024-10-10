@@ -28,7 +28,7 @@
 }
 
 header {
-  padding: 16px 24px;
+  padding: 8px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,9 +45,35 @@ header {
 }
 
 .header-logo {
-  font-size: 1.8rem;
   font-weight: bold;
-  text-transform: uppercase;
+}
+
+.header-title {
+  font-family: "Arial", sans-serif;
+  font-size: 2rem;
+  line-height: 0.25;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+  padding: 16px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+
+  &:hover {
+    &.dark-mode {
+      background-color: @dark-header-button-hover-bg;
+      color: @dark-header-button-text-color;
+    }
+    background-color: #333;
+    color: #fff;
+    cursor: pointer;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 .header-nav {

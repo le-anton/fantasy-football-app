@@ -1,0 +1,59 @@
+<div
+  id="card-container"
+  [ngClass]="player.toSwap ? 'swap-mode' : ''"
+  class="card-container"
+>
+  <div id="player-name" class="name-label">
+    {{ player.name }}
+  </div>
+
+  <div id="action-wrapper" class="card-top-icons">
+    <div class="captaincy-wrapper">
+      <div *ngIf="player.captaincy === captaincy.C" (click)="changeCaptaincy()">
+        C
+      </div>
+      <div
+        *ngIf="player.captaincy === captaincy.VC"
+        (click)="changeCaptaincy()"
+      >
+        VC
+      </div>
+      <div
+        *ngIf="player.captaincy === null && captaincyChangeMode"
+        (click)="changeCaptaincy()"
+      >
+        *
+      </div>
+    </div>
+    <div class="top-right-icon">
+      <ng-container *ngIf="viewMode === teamViewMode.CURRENT">
+        <button class="player-info" (click)="openPlayerInfoModal()">i</button>
+      </ng-container>
+      <ng-container *ngIf="viewMode === teamViewMode.TENTATIVE">
+        <button class="player-info" (click)="swapPlayer()">^</button>
+      </ng-container>
+      <ng-container *ngIf="viewMode === teamViewMode.EDIT"
+        ><button class="edit-player" (click)="swapPlayer()">-</button>
+      </ng-container>
+    </div>
+  </div>
+  <div id="shirt-wrapper">
+    <img
+      src="football-shirt.svg"
+      alt="football shirt for {{ player.team.name }}"
+      height="87"
+      width="100"
+    />
+  </div>
+  <div id="card-footer" class="footer">
+    <ng-container *ngIf="viewMode === teamViewMode.CURRENT">
+      {{ player.roundPoints || 0 }}</ng-container
+    >
+    <ng-container *ngIf="viewMode === teamViewMode.EDIT">
+      {{ player.price || 0.0 }}m</ng-container
+    >
+    <ng-container *ngIf="viewMode === teamViewMode.TENTATIVE">
+      {{ player.next_fixture || "N/A" }}</ng-container
+    >
+  </div>
+</div>

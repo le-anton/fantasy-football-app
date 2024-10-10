@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header.component.less',
 })
 export class HeaderComponent {
-  constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService, private router: Router) {}
 
   get currentTheme() {
     return this.themeService.currentTheme;
@@ -18,5 +19,9 @@ export class HeaderComponent {
 
   changeTheme() {
     this.themeService.toggleTheme();
+  }
+
+  navigateToHome() {
+    this.router.navigate(['/home']);
   }
 }

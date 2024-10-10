@@ -1,0 +1,24 @@
+<div class="custom-dialog-header">
+  <h2 class="custom-dialog-title">Player Information</h2>
+  <span class="custom-dialog-close" (click)="closeDialog()">×</span>
+</div>
+<mat-dialog-content>
+  <div class="custom-dialog-content">
+    <div id="player pic">Just put a generic player outline here for now</div>
+    <div id="round-points">
+      <label>Gameweek Points</label>
+      {{ player.roundPoints }}
+    </div>
+    <div id="next-fixture">
+      {{ player.next_fixture }}
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="custom-dialog-footer">
+    <button class="custom-dialog-button secondary" (click)="closeDialog()">
+      Cancel
+    </button>
+    <button class="custom-dialog-button primary">Save</button>
+  </div>
+</mat-dialog-actions>

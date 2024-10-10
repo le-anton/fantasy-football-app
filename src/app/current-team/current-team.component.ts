@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './current-team.component.html',
-  styleUrl: './current-team.component.less'
+  styleUrl: './current-team.component.less',
 })
-export class CurrentTeamComponent {
-
-}
+export class CurrentTeamComponent {}

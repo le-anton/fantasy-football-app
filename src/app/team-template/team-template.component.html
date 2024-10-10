@@ -1,1 +1,72 @@
-<p>team-template works!</p>
+<div id="pitch-wrapper" class="pitch">
+  <div id="goalies-wrapper" class="card-row">
+    <div *ngFor="let keep of getActivePlayersByPosition(playerPosition.GK)">
+      <app-player-card
+        [player]="keep"
+        [viewMode]="viewMode"
+        [swapPlayerMode]="swapPlayerMode"
+        (playerChange)="
+          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+        "
+        (captaincyChange)="changeCaptaincy($event)"
+        [captaincyChangeMode]="toSwapCaptaincy !== null"
+      ></app-player-card>
+    </div>
+  </div>
+  <div id="defenders-wrapper" class="card-row">
+    <div *ngFor="let def of getActivePlayersByPosition(playerPosition.DEF)">
+      <app-player-card
+        [player]="def"
+        [viewMode]="viewMode"
+        [swapPlayerMode]="swapPlayerMode"
+        (playerChange)="
+          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+        "
+        (captaincyChange)="changeCaptaincy($event)"
+        [captaincyChangeMode]="toSwapCaptaincy !== null"
+      ></app-player-card>
+    </div>
+  </div>
+  <div id="midfielders-wrapper" class="card-row">
+    <div *ngFor="let mid of getActivePlayersByPosition(playerPosition.MID)">
+      <app-player-card
+        [player]="mid"
+        [viewMode]="viewMode"
+        [swapPlayerMode]="swapPlayerMode"
+        (playerChange)="
+          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+        "
+        (captaincyChange)="changeCaptaincy($event)"
+        [captaincyChangeMode]="toSwapCaptaincy !== null"
+      ></app-player-card>
+    </div>
+  </div>
+  <div id="forwards-wrapper" class="card-row">
+    <div *ngFor="let fwd of getActivePlayersByPosition(playerPosition.FWD)">
+      <app-player-card
+        [player]="fwd"
+        [viewMode]="viewMode"
+        [swapPlayerMode]="swapPlayerMode"
+        (playerChange)="
+          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+        "
+        (captaincyChange)="changeCaptaincy($event)"
+        [captaincyChangeMode]="toSwapCaptaincy !== null"
+      ></app-player-card>
+    </div>
+  </div>
+  <div id="subs-wrapper" class="card-row">
+    <div *ngFor="let sub of getSubPlayers">
+      <app-player-card
+        [player]="sub"
+        [viewMode]="viewMode"
+        [swapPlayerMode]="swapPlayerMode"
+        (playerChange)="
+          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+        "
+        (captaincyChange)="changeCaptaincy($event)"
+        [captaincyChangeMode]="toSwapCaptaincy !== null"
+      ></app-player-card>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,13 @@
 <header class="header {{ currentTheme }}">
-  <div class="header-logo">Anton Fantasy Football App</div>
+  <div class="header-logo">
+    <h1 (click)="navigateToHome()" class="header-title {{ currentTheme }}">
+      fAntonsy Football App
+    </h1>
+  </div>
   <nav class="header-nav">
-    <a href="home">Home</a>
+    <a href="home">Your Team</a>
+    <a href="home">Scores</a>
+    <a href="home">Players</a>
   </nav>
   <div class="header-buttons">
     <button (click)="changeTheme()">Toggle Theme</button>
