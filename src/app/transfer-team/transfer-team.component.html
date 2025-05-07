@@ -1,0 +1,17 @@
+<div id="homepage-wrapper full-page">
+  <section id="review-section">
+    <ng-container *ngIf="!loading">
+      <app-edit-name [currentGW]="currentGW"></app-edit-name>
+      <div id="current-team" class="team-container">
+        <app-team-template
+          [team]="currentTeam"
+          [viewMode]="viewMode.EDIT"
+          [budget]="budget"
+        ></app-team-template>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <app-loading-spinner></app-loading-spinner>
+    </ng-container>
+  </section>
+</div>

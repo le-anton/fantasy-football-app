@@ -7,11 +7,11 @@ export interface SummaryData {
   teams: Team[];
   total_players: number;
   elements: Player[];
-  element_stats: ElementStats[];
-  elements_types: PlayerPosition[];
+  element_stats: PlayerStats[];
+  element_types: PlayerPosition[];
 }
 
-export interface ElementStats {
+export interface PlayerStats {
   label: string;
   name: string;
 }
@@ -23,8 +23,8 @@ export interface PlayerPosition {
   singular_name: string;
   singular_name_short: string;
   squad_select: number;
-  squad_min_select: null;
-  squad_max_select: null;
+  squad_min_select: number | null;
+  squad_max_select: number | null;
   squad_min_play: number;
   squad_max_play: number;
   ui_shirt_specific: boolean;
@@ -286,7 +286,6 @@ export interface PlayerDisplay {
   roundPoints: number;
   totalPoints: number;
   team: DisplayType;
-  next_fixture: string;
   sub: SubDetails | null;
   position: Positions;
   price: number;
@@ -305,21 +304,176 @@ export interface DisplayType {
 }
 
 export interface TeamData {
-  gk: PlayerDisplay[];
-  def: PlayerDisplay[];
-  mid: PlayerDisplay[];
-  fwd: PlayerDisplay[];
+  GKP: PlayerDisplay[];
+  DEF: PlayerDisplay[];
+  MID: PlayerDisplay[];
+  FWD: PlayerDisplay[];
 }
 
 export interface PositionLimits {
-  gk: Limit;
-  def: Limit;
-  mid: Limit;
-  fwd: Limit;
-  subs: Limit;
+  GKP: Limit;
+  DEF: Limit;
+  MID: Limit;
+  FWD: Limit;
+  SUBS: Limit;
 }
 
 export interface Limit {
   min: number;
   max: number;
+}
+
+export interface Fixture {
+  id: number;
+  code: number;
+  team_h: number;
+  team_h_score: number | null;
+  team_a: number;
+  team_a_score: number | null;
+  event: number;
+  finished: boolean;
+  minutes: number;
+  provisional_start_time: boolean;
+  kickoff_time: string;
+  event_name: string;
+  is_home: boolean;
+  difficulty: number;
+}
+
+export interface History {
+  element: number;
+  fixture: number;
+  opponent_team: number;
+  total_points: number;
+  was_home: boolean;
+  kickoff_time: string;
+  team_h_score: number;
+  team_a_score: number;
+  round: number;
+  minutes: number;
+  goals_scored: number;
+  assists: number;
+  clean_sheets: number;
+  goals_conceded: number;
+  own_goals: number;
+  penalties_saved: number;
+  penalties_missed: number;
+  yellow_cards: number;
+  red_cards: number;
+  saves: number;
+  bonus: number;
+  bps: number;
+  influence: string;
+  creativity: string;
+  threat: string;
+  ict_index: string;
+  starts: number;
+  expected_goals: string;
+  expected_assists: string;
+  expected_goal_involvements: string;
+  expected_goals_conceded: string;
+  value: number;
+  transfers_balance: number;
+  selected: number;
+  transfers_in: number;
+  transfers_out: number;
+}
+
+export interface LocalData {
+  team: PlayerDisplay[];
+  budget: number;
+  points: number[];
+  lastUpdated: Date;
+}
+
+export interface PlayerSummary {
+  fixtures: Fixture[];
+  history: History[];
+  history_past: HistoryPast[];
+}
+
+export interface Fixture {
+  id: number;
+  code: number;
+  team_h: number;
+  team_h_score: number | null;
+  team_a: number;
+  team_a_score: number | null;
+  event: number;
+  finished: boolean;
+  minutes: number;
+  provisional_start_time: boolean;
+  kickoff_time: string;
+  event_name: string;
+  is_home: boolean;
+  difficulty: number;
+}
+
+export interface History {
+  element: number;
+  fixture: number;
+  opponent_team: number;
+  total_points: number;
+  was_home: boolean;
+  kickoff_time: string;
+  team_h_score: number;
+  team_a_score: number;
+  round: number;
+  minutes: number;
+  goals_scored: number;
+  assists: number;
+  clean_sheets: number;
+  goals_conceded: number;
+  own_goals: number;
+  penalties_saved: number;
+  penalties_missed: number;
+  yellow_cards: number;
+  red_cards: number;
+  saves: number;
+  bonus: number;
+  bps: number;
+  influence: string;
+  creativity: string;
+  threat: string;
+  ict_index: string;
+  starts: number;
+  expected_goals: string;
+  expected_assists: string;
+  expected_goal_involvements: string;
+  expected_goals_conceded: string;
+  value: number;
+  transfers_balance: number;
+  selected: number;
+  transfers_in: number;
+  transfers_out: number;
+}
+
+export interface HistoryPast {
+  season_name: string;
+  element_code: number;
+  start_cost: number;
+  end_cost: number;
+  total_points: number;
+  minutes: number;
+  goals_scored: number;
+  assists: number;
+  clean_sheets: number;
+  goals_conceded: number;
+  own_goals: number;
+  penalties_saved: number;
+  penalties_missed: number;
+  yellow_cards: number;
+  red_cards: number;
+  saves: number;
+  bonus: number;
+  bps: number;
+  influence: string;
+  creativity: string;
+  threat: string;
+  ict_index: string;
+  starts: number;
+  expected_goals: string;
+  expected_assists: string;
+  expected_goal_involvements: string;
+  expected_goals_conceded: string;
 }

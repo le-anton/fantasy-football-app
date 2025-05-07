@@ -5,13 +5,25 @@
     </h1>
   </div>
   <nav class="header-nav">
-    <a href="home">Your Team</a>
-    <a href="home">Scores</a>
-    <a href="home">Players</a>
+    <a [routerLink]="['/home']" routerLinkActive="active-link">Home</a>
+    <a [routerLink]="['/edit']" routerLinkActive="active-link">Edit Team</a>
+    <a [routerLink]="['/transfer']" routerLinkActive="active-link">Transfers</a>
   </nav>
   <div class="header-buttons">
-    <button (click)="changeTheme()">Toggle Theme</button>
-    <button class="button">Login</button>
-    <button class="button">Sign Up</button>
+    <button
+      class="theme-toggle"
+      (click)="changeTheme()"
+      [ngClass]="themeService.isDarkMode ? 'dark-mode' : ''"
+    >
+      <span class="material-icons" *ngIf="themeService.isDarkMode"
+        >light_mode</span
+      >
+      <span class="material-icons" *ngIf="!themeService.isDarkMode"
+        >dark_mode</span
+      >
+    </button>
+
+    <!-- <button class="button">Login</button>
+    <button class="button">Sign Up</button> -->
   </div>
 </header>

@@ -1,0 +1,22 @@
+<div class="container">
+  <div *ngIf="!editNameMode; else editModeTemplate" class="edit-container">
+    <h1 class="team-name">{{ teamName }}</h1>
+    <button class="edit-btn" (click)="toggleEditMode()">Edit Name</button>
+  </div>
+
+  <ng-template #editModeTemplate>
+    <div class="edit-container">
+      <input
+        class="team-name-input"
+        [(ngModel)]="teamName"
+        placeholder="Enter Team Name"
+      />
+      <button class="save-btn" (click)="toggleEditMode()">Save</button>
+      <button class="close-btn" (click)="closeEditMode()">x</button>
+    </div>
+  </ng-template>
+
+  <div id="gwk-container">
+    <div id="gameweek-label" class="gwk-label">Gameweek {{ currentGW }}</div>
+  </div>
+</div>

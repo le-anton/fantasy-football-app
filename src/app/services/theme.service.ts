@@ -35,4 +35,12 @@ export class ThemeService {
   get currentTheme() {
     return this.activeTheme;
   }
+
+  get isLightMode() {
+    return this.activeTheme === 'light-mode';
+  }
+
+  get isDarkMode() {
+    return this.activeTheme === 'dark-mode';
+  }
 }

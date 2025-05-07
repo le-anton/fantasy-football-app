@@ -1,19 +1,4 @@
-@light-header-bg: #ffffff;
-@light-header-text-color: #333333;
-@light-header-border-color: #e0e0e0;
-@light-header-button-bg: #007bff;
-@light-header-button-text-color: #ffffff;
-@light-header-button-hover-bg: #0056b3;
-
-@dark-header-bg: #333333;
-@dark-header-text-color: #f5f5f5;
-@dark-header-border-color: #444444;
-@dark-header-button-bg: #1a73e8;
-@dark-header-button-text-color: #ffffff;
-@dark-header-button-hover-bg: #0b57d0;
-
-@header-font-family: "Montserrat", sans-serif;
-@button-font-family: "Roboto", sans-serif;
+@import "src/styles.less";
 
 .light-header-theme() {
   background-color: @light-header-bg;
@@ -34,6 +19,7 @@ header {
   align-items: center;
   font-family: @header-font-family;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  gap: 5vw;
 
   &.light-mode {
     .light-header-theme();
@@ -78,7 +64,9 @@ header {
 
 .header-nav {
   display: flex;
-  gap: 24px;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-grow: 1;
 
   a {
     text-decoration: none;
@@ -88,9 +76,17 @@ header {
     padding: 8px 12px;
     border-radius: 4px;
     transition: background-color 0.3s;
+    transition: font-weight 0.2s;
+    padding: 10px 15px;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    &.active-link {
+      color: #007bff;
+      font-weight: bold;
+      border-bottom: 2px solid #007bff;
     }
   }
 }
@@ -120,6 +116,34 @@ header {
 
     &:hover {
       background-color: @dark-header-button-hover-bg;
+    }
+  }
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+    .material-icons {
+      color: #000;
+    }
+  }
+
+  .material-icons {
+    font-size: 32px;
+    color: #555;
+    transition: color 0.2s ease-in-out;
+  }
+
+  &.dark-mode .material-icons {
+    color: lightgrey;
+    &:hover {
+      color: whitesmoke;
     }
   }
 }

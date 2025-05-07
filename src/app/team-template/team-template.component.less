@@ -1,3 +1,17 @@
+@import "src/styles.less";
+
+.funds-box {
+  display: flex;
+  justify-content: space-between;
+  div {
+    font-size: 1.2em;
+  }
+}
+
+.funds-label {
+  font-weight: bold;
+}
+
 .card-row {
   display: flex;
   flex-flow: row nowrap;
@@ -14,4 +28,54 @@
   margin: auto;
   padding: 2rem;
   border-radius: 0.6rem;
+  margin-bottom: 2em;
+}
+
+.save-container {
+  position: relative;
+  bottom: 0;
+  margin-top: 0.8em;
+  height: 0;
+  text-align: end;
+  button {
+    font-family: "Arial", sans-serif;
+    font-size: 1.4rem;
+    line-height: 0.25;
+    font-weight: bold;
+    text-align: center;
+    padding: 16px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+
+    &:hover {
+      &.dark-mode {
+        background-color: @dark-header-button-hover-bg;
+        color: @dark-header-button-text-color;
+      }
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.invalid-save {
+      opacity: 0.7;
+      background-color: #e0e0e0;
+      color: #999;
+      border-color: #ccc;
+    }
+  }
+}
+
+.pts-display {
+  display: flex;
+  justify-content: center;
+  line-height: 0;
+  font-size: 1.2em;
+  border: 1px solid black;
 }

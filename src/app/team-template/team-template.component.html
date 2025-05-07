@@ -1,12 +1,38 @@
 <div id="pitch-wrapper" class="pitch">
+  <div id="funds-container" class="funds-box">
+    <div id="budget">
+      <label class="funds-label">Funds Available:</label>
+      {{ budget - totalValue() | number : "1.1-1" }}m
+    </div>
+    <div id="team-value">
+      <label class="funds-label">Current Team Value:</label>
+      {{ totalValue() | number : "1.1-1" }}m
+    </div>
+  </div>
+  <div id="pts-display" class="pts-display" *ngIf="currentMode">
+    <h1>{{ gameweekPoints }} points</h1>
+  </div>
+  <div class="save-container" *ngIf="editMode || tentativeMode">
+    <!-- <button id="random-btn">Random</button> //TODO: install random team functionality-->
+    <button
+      id="save-btn"
+      [ngClass]="canSave ? '' : 'invalid-save'"
+      (click)="saveTeam()"
+    >
+      Save
+    </button>
+  </div>
   <div id="goalies-wrapper" class="card-row">
-    <div *ngFor="let keep of getActivePlayersByPosition(playerPosition.GK)">
+    <div *ngFor="let keep of getActivePlayersByPosition(playerPosition.GKP)">
       <app-player-card
         [player]="keep"
         [viewMode]="viewMode"
         [swapPlayerMode]="swapPlayerMode"
+        [isCurrentCaptain]="this.currentCaptain?.id === keep.id"
         (playerChange)="
-          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+          editMode
+            ? transferPlayerChange($event, keep)
+            : swapPlayerChange($event)
         "
         (captaincyChange)="changeCaptaincy($event)"
         [captaincyChangeMode]="toSwapCaptaincy !== null"
@@ -19,8 +45,11 @@
         [player]="def"
         [viewMode]="viewMode"
         [swapPlayerMode]="swapPlayerMode"
+        [isCurrentCaptain]="this.currentCaptain?.id === def.id"
         (playerChange)="
-          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+          editMode
+            ? transferPlayerChange($event, def)
+            : swapPlayerChange($event)
         "
         (captaincyChange)="changeCaptaincy($event)"
         [captaincyChangeMode]="toSwapCaptaincy !== null"
@@ -33,8 +62,11 @@
         [player]="mid"
         [viewMode]="viewMode"
         [swapPlayerMode]="swapPlayerMode"
+        [isCurrentCaptain]="this.currentCaptain?.id === mid.id"
         (playerChange)="
-          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+          editMode
+            ? transferPlayerChange($event, mid)
+            : swapPlayerChange($event)
         "
         (captaincyChange)="changeCaptaincy($event)"
         [captaincyChangeMode]="toSwapCaptaincy !== null"
@@ -47,8 +79,11 @@
         [player]="fwd"
         [viewMode]="viewMode"
         [swapPlayerMode]="swapPlayerMode"
+        [isCurrentCaptain]="this.currentCaptain?.id === fwd.id"
         (playerChange)="
-          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+          editMode
+            ? transferPlayerChange($event, fwd)
+            : swapPlayerChange($event)
         "
         (captaincyChange)="changeCaptaincy($event)"
         [captaincyChangeMode]="toSwapCaptaincy !== null"
@@ -62,7 +97,9 @@
         [viewMode]="viewMode"
         [swapPlayerMode]="swapPlayerMode"
         (playerChange)="
-          editMode ? swapPlayerChange($event) : transferPlayerChange($event)
+          editMode
+            ? transferPlayerChange($event, sub)
+            : swapPlayerChange($event)
         "
         (captaincyChange)="changeCaptaincy($event)"
         [captaincyChangeMode]="toSwapCaptaincy !== null"

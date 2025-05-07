@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.less',
 })
 export class HeaderComponent {
-  constructor(private themeService: ThemeService, private router: Router) {}
+  constructor(public themeService: ThemeService, private router: Router) {}
 
   get currentTheme() {
     return this.themeService.currentTheme;

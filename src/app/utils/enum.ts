@@ -5,11 +5,11 @@ export enum TeamViewMode {
 }
 
 export enum Positions {
-  GK = 'gk',
-  DEF = 'def',
-  MID = 'mid',
-  FWD = 'fwd',
-  SUBS = 'subs',
+  GKP = 'GKP',
+  DEF = 'DEF',
+  MID = 'MID',
+  FWD = 'FWD',
+  SUBS = 'SUBS',
 }
 
 export enum Captaincy {

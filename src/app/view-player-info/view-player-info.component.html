@@ -1,24 +1,111 @@
-<div class="custom-dialog-header">
-  <h2 class="custom-dialog-title">Player Information</h2>
-  <span class="custom-dialog-close" (click)="closeDialog()">×</span>
-</div>
 <mat-dialog-content>
-  <div class="custom-dialog-content">
-    <div id="player pic">Just put a generic player outline here for now</div>
+  <div class="dialog-header">
+    <h2 class="dialog-title">{{ player.name }}</h2>
+    <button class="close-modal-btn" (click)="closeDialog()">×</button>
+  </div>
+  <div *ngIf="loading" class="loading-wrapper">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div class="dialog-content" *ngIf="!loading">
+    <!-- <div id="player pic"></div>TODO:add player pics -->
     <div id="round-points">
-      <label>Gameweek Points</label>
-      {{ player.roundPoints }}
+      <label>Role: </label>
+      {{ player.position }}
     </div>
-    <div id="next-fixture">
-      {{ player.next_fixture }}
-    </div>
+
+    <mat-tab-group [selectedIndex]="0">
+      <mat-tab label="History">
+        <table
+          mat-table
+          [dataSource]="playerSummary.history"
+          class="mat-elevation-z8"
+        >
+          <ng-container matColumnDef="gameweek">
+            <th mat-header-cell *matHeaderCellDef>GW</th>
+            <td mat-cell *matCellDef="let fixture">
+              Gameweek {{ fixture.round }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="opposition">
+            <th mat-header-cell *matHeaderCellDef>Opponent</th>
+            <td mat-cell *matCellDef="let fixture">
+              {{ displayTeamName(fixture.opponent_team, fixture.was_home) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="result">
+            <th mat-header-cell *matHeaderCellDef>Result</th>
+            <td mat-cell *matCellDef="let fixture">
+              {{ getResult(fixture.team_h_score, fixture.team_a_score) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="gw_points">
+            <th mat-header-cell *matHeaderCellDef>Points</th>
+            <td mat-cell *matCellDef="let fixture">
+              {{ fixture.total_points }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let fixture"
+              [attr.colspan]="pastDisplayedColumns.length"
+            >
+              <div *ngIf="fixture.isExpanded">
+                Additional information for {{ fixture.event_name }}
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="pastDisplayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let fixture; columns: pastDisplayedColumns"
+            (click)="fixture.isExpanded = !fixture.isExpanded"
+            class="clickable-row"
+          ></tr>
+        </table>
+      </mat-tab>
+
+      <mat-tab label="Fixtures">
+        <table
+          mat-table
+          [dataSource]="playerSummary.fixtures"
+          class="mat-elevation-z8"
+        >
+          <ng-container matColumnDef="gameweek">
+            <th mat-header-cell *matHeaderCellDef>GW</th>
+            <td mat-cell *matCellDef="let fixture">{{ fixture.event_name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="opposition">
+            <th mat-header-cell *matHeaderCellDef>Opponent</th>
+            <td mat-cell *matCellDef="let fixture">
+              {{
+                getOpponentTeamName(
+                  fixture.team_a,
+                  fixture.team_h,
+                  fixture.is_home
+                )
+              }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="difficulty">
+            <th mat-header-cell *matHeaderCellDef>Difficulty</th>
+            <td mat-cell *matCellDef="let fixture">{{ fixture.difficulty }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="futureDisplayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let fixture; columns: futureDisplayedColumns"
+          ></tr>
+        </table>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <div class="custom-dialog-footer">
-    <button class="custom-dialog-button secondary" (click)="closeDialog()">
-      Cancel
-    </button>
-    <button class="custom-dialog-button primary">Save</button>
-  </div>
-</mat-dialog-actions>

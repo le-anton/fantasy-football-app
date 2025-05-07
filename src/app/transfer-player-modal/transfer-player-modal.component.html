@@ -1,0 +1,113 @@
+<!-- <div class="modal-backdrop" (click)="closeModal()"></div>
+<div class="modal">
+  <div class="modal-header">
+    <h2>Players for Position: {{ player.position }}</h2>
+    <button class="close-button" (click)="restorePlayer()">
+      Restore Player
+    </button>
+    <button class="close-button" (click)="closeModal()">X</button>
+  </div>
+
+  <div class="modal-body">
+    <table *ngIf="playerList.length > 0; else noPlayers" class="players-table">
+      <thead>
+        <tr>
+          <th class="sort-header" (click)="sortBy('first_name')">Name</th>
+          <th class="sort-header" (click)="sortBy('now_cost')">Price</th>
+          <th class="sort-header" (click)="sortBy('event_points')">
+            GW Points
+          </th>
+          <th class="sort-header" (click)="sortBy('total_points')">
+            Total Pts
+          </th>
+          <th
+            *ngFor="let stat of stats"
+            class="sort-header"
+            (click)="sortBy(stat.name)"
+          >
+            {{ stat.label }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of playerList" (click)="selectPlayer(player)">
+          <td>{{ player.first_name + " " + player.second_name }}</td>
+          <td>{{ player.now_cost / 10 | number : "1.1-1" }}</td>
+          <td>{{ player.event_points }}</td>
+          <td>{{ player.total_points }}</td>
+          <td *ngFor="let stat of stats">
+            {{ player[stat.name] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noPlayers>
+      <p>No players found for this position.</p>
+    </ng-template>
+  </div>
+</div> -->
+<div mat-dialog-content>
+  <div class="modal-header">
+    <h2>Players for Position: {{ player.position }}</h2>
+    <button mat-stroked-button color="primary" (click)="restorePlayer()">
+      Restore Player
+    </button>
+    <button class="close-modal-btn" (click)="closeModal()">×</button>
+  </div>
+
+  <div class="modal-body">
+    <table
+      *ngIf="playerList.length > 0; else noPlayers"
+      mat-table
+      class="players-table"
+    >
+      <thead>
+        <tr>
+          <th mat-header-cell *matHeaderCellDef (click)="sortBy('first_name')">
+            Name
+          </th>
+          <th mat-header-cell *matHeaderCellDef (click)="sortBy('now_cost')">
+            Price
+          </th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            (click)="sortBy('event_points')"
+          >
+            GW Points
+          </th>
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            (click)="sortBy('total_points')"
+          >
+            Total Pts
+          </th>
+          <th
+            mat-header-cell
+            *ngFor="let stat of stats"
+            (click)="sortBy(stat.name)"
+          >
+            {{ stat.label }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of playerList" (click)="selectPlayer(player)">
+          <td mat-cell>{{ player.first_name + " " + player.second_name }}</td>
+          <td mat-cell>{{ player.now_cost / 10 | number : "1.1-1" }}</td>
+          <td mat-cell>{{ player.event_points }}</td>
+          <td mat-cell>{{ player.total_points }}</td>
+          <td mat-cell *ngFor="let stat of stats">
+            {{ player[stat.name] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #noPlayers>
+      <p>No players found for this position.</p>
+    </ng-template>
+  </div>
+</div>
