@@ -18,7 +18,7 @@ export class TeamResolver implements Resolve<any> {
   constructor(
     private localStorageService: LocalStorageService,
     private router: Router
-  ) {}
+  ) { }
 
   resolve(): Observable<any> {
     const teamData = fetchTeamData(this.localStorageService);

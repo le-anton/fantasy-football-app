@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ThemeService } from '../services/theme.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { TeamDataService } from '../services/team-data.service';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +12,11 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './header.component.less',
 })
 export class HeaderComponent {
-  constructor(public themeService: ThemeService, private router: Router) {}
+  constructor(
+    public themeService: ThemeService,
+    private router: Router,
+    public teamDataService: TeamDataService
+  ) { }
 
   get currentTheme() {
     return this.themeService.currentTheme;
@@ -23,5 +28,9 @@ export class HeaderComponent {
 
   navigateToHome() {
     this.router.navigate(['/home']);
+  }
+
+  hasTeamData(): boolean {
+    return this.teamDataService.hasTeamData();
   }
 }

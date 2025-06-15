@@ -1,4 +1,3 @@
-// team-data.service.ts
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -13,5 +12,9 @@ export class TeamDataService {
 
   get teamData() {
     return this._teamData;
+  }
+
+  public hasTeamData(): boolean {
+    return !!this._teamData;
   }
 }

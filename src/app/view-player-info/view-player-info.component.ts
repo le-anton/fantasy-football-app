@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -35,7 +35,7 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './view-player-info.component.html',
   styleUrl: './view-player-info.component.less',
 })
-export class ViewPlayerInfoComponent implements OnInit {
+export class ViewPlayerInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   playerSummary: PlayerSummary = {
     fixtures: [],
     history: [],
@@ -50,6 +50,9 @@ export class ViewPlayerInfoComponent implements OnInit {
     'result',
     'gw_points',
   ];
+  @ViewChild('scrollableArea') scrollableAreaRef!: ElementRef<HTMLDivElement>;
+  public showScrollFade = false;
+  private scrollListener!: () => void;
 
   constructor(
     public dialogRef: MatDialogRef<ViewPlayerInfoComponent>,
@@ -58,15 +61,30 @@ export class ViewPlayerInfoComponent implements OnInit {
     private router: Router,
     private configService: ConfigService,
     @Inject(MAT_DIALOG_DATA) public player: PlayerDisplay
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadInitialData();
-    this.teams = this.configService.getTeams();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.scrollableAreaRef) {
+      setTimeout(() => this.checkScroll(), 0);
+
+      this.scrollListener = this.onScroll.bind(this);
+      this.scrollableAreaRef.nativeElement.addEventListener('scroll', this.scrollListener);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.scrollableAreaRef && this.scrollListener) {
+      this.scrollableAreaRef.nativeElement.removeEventListener('scroll', this.scrollListener);
+    }
   }
 
   loadInitialData() {
     this.loading = true;
+    this.teams = this.configService.getTeams();
 
     this.fantasyRestService
       .getPlayerSummary(this.player.id.toString())
@@ -76,13 +94,28 @@ export class ViewPlayerInfoComponent implements OnInit {
           this.playerSummary.history.reverse();
         },
         error: () => {
-          this.toastr.error('Error fetching config.');
-          this.router.navigate(['/error']);
+          this.toastr.error('Error fetching player summary.');
         },
         complete: () => {
           this.loading = false;
+          setTimeout(() => this.checkScroll(), 0);
         },
       });
+  }
+
+  onScroll(): void {
+    this.checkScroll();
+  }
+
+  private checkScroll(): void {
+    if (this.scrollableAreaRef) {
+      const el = this.scrollableAreaRef.nativeElement;
+      const threshold = 5;
+
+      this.showScrollFade = el.scrollHeight - el.scrollTop - el.clientHeight > threshold;
+    } else {
+      this.showScrollFade = false;
+    }
   }
 
   getOpponentTeamName(teamA: number, teamH: number, isHome: boolean): string {

@@ -1,5 +1,3 @@
-@import "src/styles.less";
-
 .funds-box {
   display: flex;
   justify-content: space-between;
@@ -38,23 +36,21 @@
   height: 0;
   text-align: end;
   button {
-    font-family: "Arial", sans-serif;
+    font-family: var(--button-font-family);
     font-size: 1.4rem;
     line-height: 0.25;
     font-weight: bold;
     text-align: center;
     padding: 16px;
-    border: 2px solid #333;
+    border: 2px solid var(--text-color);
     border-radius: 8px;
     transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    background-color: var(--header-button-bg);
+    color: var(--header-button-text-color);
 
     &:hover {
-      &.dark-mode {
-        background-color: @dark-header-button-hover-bg;
-        color: @dark-header-button-text-color;
-      }
-      background-color: #333;
-      color: #fff;
+      background-color: var(--header-button-hover-bg);
+      color: var(--header-button-text-color);
       cursor: pointer;
       transform: scale(1.05);
     }

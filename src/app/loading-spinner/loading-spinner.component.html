@@ -1,3 +1,6 @@
-<div *ngIf="loading$" class="spinner-overlay">
+<div *ngIf="loading$ && !inline" class="spinner-overlay">
   <div class="spinner"></div>
+</div>
+<div *ngIf="inline" class="inline-spinner-container">
+  <div class="inline-spinner"></div>
 </div>

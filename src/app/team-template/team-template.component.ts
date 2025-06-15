@@ -34,11 +34,13 @@ export class TeamTemplateComponent implements OnInit {
     private router: Router,
     private localStorageService: LocalStorageService,
     private teamDataService: TeamDataService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.transferTeam = JSON.parse(JSON.stringify(this.team));
     this.getCurrentCaptain();
+    const emptySlots = this.transferTeam.filter(player => player.id === -1 || player.id === 0).length;
+    this.saveService.setFreePlayers(emptySlots);
   }
 
   get swapPlayerMode(): boolean {
@@ -89,26 +91,80 @@ export class TeamTemplateComponent implements OnInit {
   }
 
   transferPlayerChange(
-    player: PlayerDisplay | undefined,
-    original: PlayerDisplay
+    newPlayer: PlayerDisplay,
+    originalPlayerInSlot: PlayerDisplay
   ) {
-    if (this.transferTeam.filter((val) => val.id === player?.id).length > 1) {
-      this.toastr.error('Player already in team');
+    // Handle case where newPlayer might be undefined/null
+    if (!newPlayer) {
+      return;
     }
-    const idx = this.team.findIndex(
-      (val) => val.id === original.id && val.position === original.position
-    );
-    if (!player) {
-      this.transferTeam[idx].price = 0;
-    } else if (player.id !== original.id) {
-      player.sub = original.sub;
-      player.captaincy = original.captaincy;
-      player.toTransfer = true;
-      this.transferTeam[idx] = player;
+    let slotIndex = -1;
+
+    for (let i = 0; i < this.transferTeam.length; i++) {
+      const currentSlotPlayer = this.transferTeam[i];
+      if (currentSlotPlayer.position === originalPlayerInSlot.position &&
+        ((currentSlotPlayer.sub === null && originalPlayerInSlot.sub === null) ||
+          (currentSlotPlayer.sub && originalPlayerInSlot.sub &&
+            currentSlotPlayer.sub.subPriority === originalPlayerInSlot.sub.subPriority))) {
+
+        if (currentSlotPlayer.id === originalPlayerInSlot.id ||
+          (originalPlayerInSlot.id === -1 || originalPlayerInSlot.id === 0)) {
+          slotIndex = i;
+          break;
+        } else if (slotIndex === -1) {
+          slotIndex = i;
+        }
+      }
+    }
+
+    if (slotIndex === -1) {
+      this.toastr.error('Error updating player: Slot not found.');
+      return;
+    }
+
+    const currentPlayerInSlot = this.transferTeam[slotIndex];
+    this.updatePlayerAtIndex(newPlayer, currentPlayerInSlot, slotIndex);
+  }
+
+  private updatePlayerAtIndex(newPlayer: PlayerDisplay, originalPlayer: PlayerDisplay, index: number) {
+    if (!newPlayer || !newPlayer.hasOwnProperty('id')) {
+      return;
+    }
+
+    if (newPlayer.id === originalPlayer.id) {
+      this.transferTeam[index] = newPlayer;
     } else {
-      original.price = this.team[idx].price;
-      this.transferTeam[idx] = original;
+      if (newPlayer.id !== -1 && newPlayer.id !== 0) {
+        const duplicateEntries = this.transferTeam
+          .map((p, i) => ({ player: p, index: i }))
+          .filter(entry =>
+            entry.index !== index &&
+            entry.player.id === newPlayer.id &&
+            entry.player.id !== originalPlayer.id
+          );
+
+        if (duplicateEntries.length > 0) {
+          this.toastr.error(`This player is already in your team.`);
+          return;
+        }
+      }
+
+      newPlayer.sub = originalPlayer.sub;
+      newPlayer.captaincy = originalPlayer.captaincy;
+
+      const originalPlayerInThisSlot = this.team[index];
+      const isEmptySlot = newPlayer.id === -1 || newPlayer.id === 0;
+      const isDifferentFromOriginal = newPlayer.id !== originalPlayerInThisSlot.id;
+
+      if (isEmptySlot) {
+        newPlayer.captaincy = null;
+      }
+
+      newPlayer.toTransfer = isEmptySlot || isDifferentFromOriginal;
+
+      this.transferTeam[index] = newPlayer;
     }
+
     this.saveService.setCandidateTeam(this.transferTeam);
     this.checkCanSave();
   }
@@ -121,9 +177,9 @@ export class TeamTemplateComponent implements OnInit {
       activePlayer.position === benchedPlayer.position;
     const swapWithinRange: boolean =
       this.getActivePlayersByPosition(activePlayer.position).length >
-        positionMinimums[activePlayer.position].min &&
+      positionMinimums[activePlayer.position].min &&
       this.getActivePlayersByPosition(benchedPlayer.position).length <
-        positionMinimums[benchedPlayer.position].max;
+      positionMinimums[benchedPlayer.position].max;
 
     return swapWithinRange || samePosition;
   }
@@ -161,9 +217,10 @@ export class TeamTemplateComponent implements OnInit {
     this.canSave =
       this.viewMode === TeamViewMode.EDIT
         ? this.saveService.getCanSave() &&
-          this.fundsAvailable &&
-          this.noDuplicates &&
-          this.teamQuotaNotExceeded
+        this.fundsAvailable &&
+        this.noDuplicates &&
+        this.teamQuotaNotExceeded &&
+        this.hasTeamChanges
         : true;
   }
 
@@ -182,11 +239,18 @@ export class TeamTemplateComponent implements OnInit {
     const teamCount: Record<number, number> = {};
     this.transferTeam.forEach(
       (player) =>
-        (teamCount[player.team.id] = teamCount[player.team.id]
-          ? teamCount[player.team.id] + 1
-          : 1)
+      (teamCount[player.team.id] = teamCount[player.team.id]
+        ? teamCount[player.team.id] + 1
+        : 1)
     );
     return Object.values(teamCount).every((val) => val <= 3);
+  }
+
+  get hasTeamChanges(): boolean {
+    return this.transferTeam.some((transferPlayer, index) => {
+      const originalPlayer = this.team[index];
+      return transferPlayer.id !== originalPlayer.id;
+    });
   }
 
   totalValue() {
@@ -196,14 +260,27 @@ export class TeamTemplateComponent implements OnInit {
   saveTeam() {
     if (!this.canSave) {
       const errorMsg: string[] = [];
-      if (!this.saveService.getCanSave() && this.editMode)
-        errorMsg.push('Players not filled');
+
+      if (!this.saveService.getCanSave() && this.editMode) {
+        const hasUnfilledNonTransferSlots = this.transferTeam.some(player =>
+          (player.id === -1 || player.id === 0) && !player.toTransfer
+        );
+
+        if (hasUnfilledNonTransferSlots) {
+          errorMsg.push('Players not filled');
+        }
+      }
+
       if (!this.fundsAvailable && this.editMode)
         errorMsg.push('Funds not available');
       if (!this.teamQuotaNotExceeded && this.editMode)
         errorMsg.push('Too many players from one team');
-      if (errorMsg.length === 0) errorMsg.push('Changes invalid or not found.');
-      this.toastr.error(errorMsg.join(', '));
+      if (errorMsg.length === 0 && !this.canSave)
+        errorMsg.push('Changes invalid or not found.');
+
+      if (errorMsg.length > 0) {
+        this.toastr.error(errorMsg.join(', '));
+      }
       return;
     }
     if (this.tentativeMode) {
@@ -212,7 +289,7 @@ export class TeamTemplateComponent implements OnInit {
         JSON.stringify({
           team: this.team,
           budget: this.budget,
-          points: [], //TODO: add points history
+          points: [],
           lastUpdated: new Date(),
         })
       );

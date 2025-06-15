@@ -68,8 +68,8 @@ export class ConfigService {
   getNextFixtures(): Fixture[] {
     return this.currentWeek !== 38
       ? this.fixtures.filter(
-          (fixture) => fixture.event === this.currentWeek + 1
-        )
+        (fixture) => fixture.event === this.currentWeek + 1
+      )
       : [];
   }
 }

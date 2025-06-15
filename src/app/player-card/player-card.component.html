@@ -2,12 +2,13 @@
   id="card-container"
   [ngClass]="{
     'swap-mode': playerToDisplay.toSwap,
-    'transfer-mode': player.toTransfer
+    'transfer-mode': playerToDisplay.toTransfer,
+    'player-selected': !selectPlayerMode
   }"
   class="card-container"
 >
   <div id="player-name" class="name-label">
-    <p>
+    <p class="ellipsis">
       {{ selectPlayerMode ? "Select Player" : playerToDisplay.name }}
     </p>
   </div>
@@ -61,7 +62,6 @@
       height="87"
       width="100"
     />
-    <!-- //TODO: colour shirts according to team -->
   </div>
   <div id="card-footer" class="footer">
     <div *ngIf="selectPlayerMode">&nbsp;</div>

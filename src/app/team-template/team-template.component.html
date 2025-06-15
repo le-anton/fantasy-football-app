@@ -10,10 +10,9 @@
     </div>
   </div>
   <div id="pts-display" class="pts-display" *ngIf="currentMode">
-    <h1>{{ gameweekPoints }} points</h1>
+    <h1>{{ gameweekPoints }} points RESPONSIVE readme</h1>
   </div>
   <div class="save-container" *ngIf="editMode || tentativeMode">
-    <!-- <button id="random-btn">Random</button> //TODO: install random team functionality-->
     <button
       id="save-btn"
       [ngClass]="canSave ? '' : 'invalid-save'"

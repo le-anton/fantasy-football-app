@@ -8,20 +8,25 @@ export class ThemeService {
 
   constructor() {
     if (typeof window !== 'undefined' && window.localStorage) {
-      this.activeTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark-mode'
-        : 'light-mode';
+      const storedTheme = window.localStorage.getItem('theme') as 'light-mode' | 'dark-mode' | null;
+      if (storedTheme) {
+        this.activeTheme = storedTheme;
+      } else {
+        this.activeTheme = window.matchMedia('(prefers-color-scheme: dark)')
+          .matches
+          ? 'dark-mode'
+          : 'light-mode';
+      }
       this.setTheme(this.activeTheme);
     }
   }
 
   setTheme(theme: 'light-mode' | 'dark-mode') {
     this.activeTheme = theme;
-    document.body.setAttribute(
-      'data-theme',
-      this.activeTheme === 'light-mode' ? 'dark-mode' : 'light-mode'
-    );
+    document.body.setAttribute('data-theme', theme);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem('theme', theme);
+    }
   }
 
   toggleTheme() {

@@ -6,8 +6,22 @@
   </div>
   <nav class="header-nav">
     <a [routerLink]="['/home']" routerLinkActive="active-link">Home</a>
-    <a [routerLink]="['/edit']" routerLinkActive="active-link">Edit Team</a>
-    <a [routerLink]="['/transfer']" routerLinkActive="active-link">Transfers</a>
+    <a
+      [routerLink]="hasTeamData() ? ['/edit'] : null"
+      routerLinkActive="active-link"
+      [class.disabled-link]="!hasTeamData()"
+      [attr.tabindex]="!hasTeamData() ? -1 : null"
+      (click)="!hasTeamData() && $event.preventDefault()"
+      >Edit Team</a
+    >
+    <a
+      [routerLink]="hasTeamData() ? ['/transfer'] : null"
+      routerLinkActive="active-link"
+      [class.disabled-link]="!hasTeamData()"
+      [attr.tabindex]="!hasTeamData() ? -1 : null"
+      (click)="!hasTeamData() && $event.preventDefault()"
+      >Transfers</a
+    >
   </nav>
   <div class="header-buttons">
     <button
@@ -22,8 +36,5 @@
         >dark_mode</span
       >
     </button>
-
-    <!-- <button class="button">Login</button>
-    <button class="button">Sign Up</button> -->
   </div>
 </header>

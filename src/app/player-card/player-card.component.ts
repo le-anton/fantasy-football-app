@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Captaincy, Positions, TeamViewMode } from '../utils/enum';
 import { Player, PlayerDisplay, TeamData } from '../utils/model';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ import { SaveService } from '../services/save.service';
   templateUrl: './player-card.component.html',
   styleUrl: './player-card.component.less',
 })
-export class PlayerCardComponent implements OnInit {
+export class PlayerCardComponent implements OnInit, OnChanges {
   @Input() viewMode: TeamViewMode = TeamViewMode.CURRENT;
   @Input() swapPlayerMode: boolean = false;
   @Input() player: PlayerDisplay = defaultPlayer;
@@ -35,7 +35,7 @@ export class PlayerCardComponent implements OnInit {
     public dialog: MatDialog,
     private config: ConfigService,
     private saveService: SaveService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.playerToDisplay = this.player;
@@ -43,6 +43,18 @@ export class PlayerCardComponent implements OnInit {
     if (this.player.id === -1) {
       this.transferCandidate = null;
       this.selectPlayerMode = true;
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['player'] && changes['player'].currentValue) {
+      this.playerToDisplay = changes['player'].currentValue;
+      if (this.player.id === -1) {
+        this.transferCandidate = null;
+        this.selectPlayerMode = true;
+      } else {
+        this.selectPlayerMode = false;
+      }
     }
   }
 
@@ -60,7 +72,7 @@ export class PlayerCardComponent implements OnInit {
   transferPlayer() {
     if (!this.selectPlayerMode) {
       this.freeUpPlayer();
-      this.playerChange.emit();
+      this.playerChange.emit(this.player);
     } else {
       this.dialog
         .open(TransferPlayerModalComponent, {
@@ -78,7 +90,7 @@ export class PlayerCardComponent implements OnInit {
               this.playerChange.emit(this.player);
               break;
             default:
-              if (result !== null) {
+              if (result) {
                 this.transferCandidate = result as Player;
                 this.playerToDisplay = convertPlayerToCustomFormat(
                   result,
@@ -98,6 +110,8 @@ export class PlayerCardComponent implements OnInit {
   freeUpPlayer() {
     this.transferCandidate = null;
     this.selectPlayerMode = true;
+    this.player.toTransfer = true;
+    this.playerToDisplay = { ...this.player, toTransfer: true };
     this.saveService.addFreePlayer();
   }
 

@@ -25,6 +25,7 @@
     ]
   },
   "angularCompilerOptions": {
+    "baseUrl": "./src",
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

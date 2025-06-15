@@ -7,7 +7,7 @@ import { Player, SummaryData, PlayerSummary, Fixture } from '../utils/model';
   providedIn: 'root',
 })
 export class FantasyApiRestService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   getSummaryData(): Observable<SummaryData> {
     return this.httpClient.get<SummaryData>('/api/bootstrap-static/');

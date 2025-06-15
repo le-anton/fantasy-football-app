@@ -1,98 +1,218 @@
-// .modal-backdrop {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   background-color: rgba(0, 0, 0, 0.5);
-//   z-index: 999;
-// }
-
-// .modal {
-//   position: fixed;
-//   top: 50%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-//   background-color: white;
-//   border-radius: 8px;
-//   width: 400px;
-//   max-width: 90%;
-//   z-index: 1000;
-//   padding: 20px;
-// }
-
-// .modal-header {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   margin-bottom: 20px;
-// }
-
-// .modal-body {
-//   max-height: 400px;
-//   overflow-y: auto;
-// }
-
-// .close-button {
-//   background-color: transparent;
-//   border: none;
-//   font-size: 20px;
-//   cursor: pointer;
-// }
-
-// .players-table {
-//   width: 60vw;
-//   border-collapse: collapse;
-// }
-
-// .players-table th,
-// .players-table td {
-//   padding: 10px;
-//   border-bottom: 1px solid #ddd;
-//   text-align: left;
-// }
-
-.sort-header {
-  cursor: pointer;
+:host {
+  display: block;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  padding: 20px;
 }
+
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--header-border-color);
+  padding-bottom: 10px;
+
+  h2 {
+    color: var(--text-color);
+    margin: 0;
+  }
+
+  .close-modal-btn {
+    color: var(--text-color);
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
 }
 
 .modal-body {
   margin-top: 16px;
-  height: 70vh;
+  max-height: 70vh;
   width: 60vw;
+  overflow-y: auto;
 }
 
-table.players-table {
+.filter-container {
+  margin-bottom: 16px;
+  mat-form-field {
+    width: 100%;
+
+    ::ng-deep .mat-mdc-form-field-label,
+    ::ng-deep .mdc-floating-label {
+      color: var(--text-color) !important;
+    }
+
+    ::ng-deep .mat-mdc-input-element {
+      color: var(--text-color) !important;
+    }
+
+    ::ng-deep .mdc-notched-outline__leading,
+    ::ng-deep .mdc-notched-outline__trailing {
+      border-color: var(--primary-color) !important;
+    }
+    ::ng-deep .mdc-notched-outline__notch {
+      border-top-color: var(--primary-color) !important;
+      border-bottom-color: var(--primary-color) !important;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-left-width: 0 !important;
+      border-right-width: 0 !important;
+    }
+
+    &.mat-focused {
+      ::ng-deep .mdc-notched-outline__leading,
+      ::ng-deep .mdc-notched-outline__notch,
+      ::ng-deep .mdc-notched-outline__trailing {
+        border-color: var(--accent-color) !important;
+        border-width: 2px !important;
+      }
+
+      ::ng-deep .mdc-notched-outline__notch {
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+      }
+
+      ::ng-deep .mat-mdc-form-field-label,
+      ::ng-deep .mdc-floating-label.mdc-floating-label--float-above {
+        color: var(--accent-color) !important;
+      }
+
+      ::ng-deep .mat-mdc-input-element {
+        &::placeholder {
+          color: var(--input-placeholder-text-color, var(--text-color)) !important;
+          opacity: var(--input-placeholder-opacity, 0.54) !important;
+        }
+      }
+    }
+
+    ::ng-deep .mat-mdc-form-field-icon-suffix {
+      color: var(--text-color) !important;
+    }
+  }
+}
+
+.table-container {
+  border: 1px solid var(--header-border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 5px 0;
+  background-color: var(--secondary-color);
+  max-height: calc(70vh - 100px);
+  overflow-y: auto;
+  overflow-x: auto;
   width: 100%;
-  border-collapse: collapse;
+
+  scrollbar-width: auto !important;
+  -ms-overflow-style: auto !important;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+    height: 10px !important;
+    display: block !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-color, #888) !important;
+    border-radius: 5px !important;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--secondary-color, #f1f1f1) !important;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  table.players-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--secondary-color);
+    border: none;
+    table-layout: auto;
+    min-width: 1200px;
+
+    th {
+      cursor: pointer;
+      font-weight: bold;
+      text-align: left;
+      padding: 12px 8px;
+      border-bottom: 2px solid var(--primary-color);
+      color: var(--text-color);
+      background-color: var(--header-background-color, var(--header-border-color));
+      white-space: nowrap;
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: var(--header-hover-color, var(--primary-color));
+        color: var(--header-hover-text-color, var(--text-color-inverted, #ffffff));
+      }
+    }
+
+    td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--header-border-color);
+      color: var(--text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    tr[mat-row] {
+      &:hover {
+        background-color: var(--table-row-hover-color, rgba(0, 0, 0, 0.07)) !important;
+        cursor: pointer !important;
+      }
+    }
+  }
 }
 
-th {
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: var(--secondary-color) !important;
+  color: var(--text-color) !important;
+  border-radius: 8px !important;
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__title {
+  color: var(--text-color) !important;
+}
+
+button.mat-stroked-button {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+
+  &:hover {
+    background-color: rgba(var(--primary-color-rgb, 0, 0, 0), 0.05) !important;
+  }
+}
+
+.restore-player-button {
+  background-color: var(--accent-color, #ff4081) !important;
+  color: var(--accent-contrast-color, #ffffff) !important;
+  margin-left: 10px;
+  padding: 0 16px;
+  line-height: 36px;
+  border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  text-align: left;
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
+
+  &:hover {
+    background-color: var(--accent-color-darker, #f50057) !important;
+  }
 }
 
-td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
+.no-players-message {
+  color: var(--text-color);
+  padding: 20px;
+  text-align: center;
+  font-style: italic;
 }
 
-mat-dialog-content {
-  overflow-y: auto;
-  max-height: 70vh;
-}
-
-mat-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 16px;
+.sort-header {
+  cursor: pointer;
+  &:hover {
+    color: var(--primary-color);
+  }
 }

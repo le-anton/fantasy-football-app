@@ -10,6 +10,7 @@
         class="team-name-input"
         [(ngModel)]="teamName"
         placeholder="Enter Team Name"
+        (keyup.enter)="toggleEditMode()"
       />
       <button class="save-btn" (click)="toggleEditMode()">Save</button>
       <button class="close-btn" (click)="closeEditMode()">x</button>
