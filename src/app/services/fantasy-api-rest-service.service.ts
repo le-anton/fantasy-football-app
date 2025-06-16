@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Player, SummaryData, PlayerSummary, Fixture } from '../utils/model';
-import { environment } from '../../environments/environment'; // Import environment
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FantasyApiRestService {
-  private apiUrl = environment.apiUrl; // Use apiUrl from environment
+  private apiUrl = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) { }
 

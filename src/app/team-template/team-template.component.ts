@@ -237,12 +237,14 @@ export class TeamTemplateComponent implements OnInit {
 
   get teamQuotaNotExceeded(): boolean {
     const teamCount: Record<number, number> = {};
-    this.transferTeam.forEach(
-      (player) =>
-      (teamCount[player.team.id] = teamCount[player.team.id]
-        ? teamCount[player.team.id] + 1
-        : 1)
-    );
+    this.transferTeam
+      .filter(player => player.id !== -1 && player.id !== 0 && player.team.id !== 0) // Filter out empty/default players
+      .forEach(
+        (player) =>
+        (teamCount[player.team.id] = teamCount[player.team.id]
+          ? teamCount[player.team.id] + 1
+          : 1)
+      );
     return Object.values(teamCount).every((val) => val <= 3);
   }
 

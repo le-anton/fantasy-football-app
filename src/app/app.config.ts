@@ -6,6 +6,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { APP_BASE_HREF } from '@angular/common'; // Import APP_BASE_HREF
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,5 +24,6 @@ export const appConfig: ApplicationConfig = {
       timeOut: 2000,
       positionClass: 'toast-bottom-right',
     }),
+    { provide: APP_BASE_HREF, useValue: '/fantasy-football-app/' } // Provide APP_BASE_HREF
   ],
 };

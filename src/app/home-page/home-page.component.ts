@@ -40,6 +40,7 @@ export class HomePageComponent implements OnInit {
   currentTeam: PlayerDisplay[] = [];
   currentWeekPoints: number = 0;
   currentGW: number = 1;
+  apiError: string | null = null;
 
   budget: number = 0;
   currentTeamValue: number = 0;
@@ -54,16 +55,27 @@ export class HomePageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //TODO: Edit Team name
+    if (this.teamDataService.hasTeamData()) {
+      Object.assign(this, this.teamDataService.teamData);
+    } else {
+      this.toastr.error('Initial team data not found. Please try refreshing.');
+    }
+
     this.fetchApiData();
-    Object.assign(this, this.teamDataService.teamData);
-    if (this.currentTeam.find((player) => player.id === -1)) {
+
+    if (this.currentTeam && this.currentTeam.length > 0 && this.currentTeam.find((player) => player.id === -1)) {
       this.router.navigate(['/transfer']);
+    } else if (!this.currentTeam || this.currentTeam.length === 0 && this.teamDataService.hasTeamData()) {
+      const resolvedData = this.teamDataService.teamData;
+      if (resolvedData && resolvedData.currentTeam && resolvedData.currentTeam.find((player: PlayerDisplay) => player.id === -1)) {
+        this.router.navigate(['/transfer']);
+      }
     }
   }
 
   fetchApiData() {
     this.loading = true;
+    this.apiError = null;
     forkJoin({
       summary: this.fantasyRestService.getSummaryData(),
       fixtures: this.fantasyRestService.getFixtures(),
@@ -72,15 +84,26 @@ export class HomePageComponent implements OnInit {
         this.configService.setConfig(data.summary);
         this.configService.setFixtures(data.fixtures);
         this.currentGW =
-          data.summary.events.find((gw) => gw.is_current)?.id || 1;
-      },
-      error: () => {
-        this.toastr.error('Error fetching config.');
-        this.router.navigate(['/error']);
-      },
-      complete: () => {
+          data.summary.events.find((gw) => gw.is_current)?.id || this.currentGW || 1;
+
+        if (this.teamDataService.hasTeamData() && (!this.currentTeam || this.currentTeam.length === 0)) {
+            Object.assign(this, this.teamDataService.teamData);
+            if (this.currentTeam && this.currentTeam.length > 0 && this.currentTeam.find((player) => player.id === -1)) {
+                this.router.navigate(['/transfer']);
+            }
+        }
         this.loading = false;
       },
+      error: (err) => {
+        console.error('Error fetching API data in HomePageComponent:', err);
+        this.toastr.error('Could not refresh live data. Displaying cached information if available.', 'API Error');
+        this.apiError = 'Failed to load live data. Please try again later.';
+        if (!this.configService.getTeams() || this.configService.getTeams().length === 0) {
+          this.toastr.error('Essential configuration missing. Navigating to error page.', 'Critical Error');
+          this.router.navigate(['/error']);
+        }
+        this.loading = false;
+      }
     });
   }
 
