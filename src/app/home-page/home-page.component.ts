@@ -52,7 +52,7 @@ export class HomePageComponent implements OnInit {
     private configService: ConfigService,
     private toastr: ToastrService,
     private teamDataService: TeamDataService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.teamDataService.hasTeamData()) {
@@ -87,10 +87,10 @@ export class HomePageComponent implements OnInit {
           data.summary.events.find((gw) => gw.is_current)?.id || this.currentGW || 1;
 
         if (this.teamDataService.hasTeamData() && (!this.currentTeam || this.currentTeam.length === 0)) {
-            Object.assign(this, this.teamDataService.teamData);
-            if (this.currentTeam && this.currentTeam.length > 0 && this.currentTeam.find((player) => player.id === -1)) {
-                this.router.navigate(['/transfer']);
-            }
+          Object.assign(this, this.teamDataService.teamData);
+          if (this.currentTeam && this.currentTeam.length > 0 && this.currentTeam.find((player) => player.id === -1)) {
+            this.router.navigate(['/transfer']);
+          }
         }
         this.loading = false;
       },

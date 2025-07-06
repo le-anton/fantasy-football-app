@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://fantasy.premierleague.com/api' // Official FPL API endpoint
+    apiUrl: 'https://fpl-proxy-xi.vercel.app/api'
 };

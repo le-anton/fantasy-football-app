@@ -1,4 +1,21 @@
-# FantasyFootballApp
+# fAntonsy Football App
+
+Welcome to the fAntonsy Football App! This project is built with Angular, designed to mimic the look and feel of the official Fantasy Premier League (FPL) website.
+
+## Live Demo
+
+🚀 **[Try the app here: https://le-anton.github.io/fantasy-football-app/transfer](https://le-anton.github.io/fantasy-football-app)**
+
+
+**Important Notes:**
+
+*   **Frontend Only:** This application is entirely frontend-based. There is no dedicated backend server to store points data persistently across different sessions or weeks.
+*   **No Data Persistence Between Weeks:** Player selections, team names, and points are primarily stored in your browser's local storage. This means data will persist in your current browser, but gameweek progression and historical point tracking like in the official FPL game are not implemented. Each "session" is effectively a snapshot.
+*   **For Fun & Demonstration:** The main goal of this app was to explore Angular features and recreate some of the FPL user interface elements for fun. It uses the official FPL API for player and fixture data but does not interact with your actual FPL account or save any league/team progress.
+
+Enjoy tinkering with your fantasy team!
+
+---
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.1.
 
