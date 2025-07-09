@@ -84,6 +84,10 @@ export class TransferPlayerModalComponent implements AfterViewInit {
           return typeof value === 'number' ? value : (value || '').toString().toLowerCase();
       }
     };
+
+    this.sort.active = 'now_cost';
+    this.sort.direction = 'desc';
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {
@@ -113,6 +117,12 @@ export class TransferPlayerModalComponent implements AfterViewInit {
             !candidateTeamIds.includes(p.id)
         );
       this.dataSource.data = this.staticPlayerList;
+
+      if (this.sort) {
+        this.sort.active = 'now_cost';
+        this.sort.direction = 'desc';
+        this.dataSource.sort = this.sort;
+      }
     }
   }
 
